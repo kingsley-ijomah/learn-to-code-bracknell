@@ -8,23 +8,21 @@ class Person
   end
 
   def age
-    if birthday?
-      this_year - dob.year
-    elsif before_birthday?
-      (this_year - dob.year) - 1
-    elsif past_birthday?
-      this_year - dob.year
+    if birthday? || past_birthday?
+      calculate_age
+    else 
+      calculate_age - 1
     end
   end
 
   private
 
-  def past_birthday?
-    (dob.month == this_month and today > dob.day) or this_month > dob.month
+  def calculate_age
+    this_year - dob.year
   end
 
-  def before_birthday?
-    dob.month <= this_month and today < dob.day
+  def past_birthday?
+    (dob.month == this_month and today > dob.day) or this_month > dob.month
   end
 
   def birthday?
