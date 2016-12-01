@@ -8,7 +8,7 @@ class Person
   end
 
   def age
-    if birthday? || past_birthday?
+    if birthday? or past_birthday?
       calculate_age
     else 
       calculate_age - 1
