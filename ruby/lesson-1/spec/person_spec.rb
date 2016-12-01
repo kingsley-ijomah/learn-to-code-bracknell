@@ -1,35 +1,30 @@
-require 'person' 
+require 'person'
+require 'age_calculator'
 
 RSpec.describe Person do
-  let(:birthday) { Time.new(1982, 9, 21) }
+  let(:birthday) { Time.new(1982, 10, 15) }
   let(:person) { Person.new('kingsley', 'ijomah', birthday) }
 
-  context 'when it is your birthday' do
-    let(:today) { Time.new(2016, 9, 21) }
+  describe '#attr_reader' do
+    it 'returns firstname' do
+      expect(person.firstname).to eq('kingsley')
+    end
 
-    it 'calculates age' do
-      allow_any_instance_of(Person).to receive(:current_date) { today }
-      expect(person.age).to eq (today.year - birthday.year)
+    it 'returns lastname' do
+      expect(person.lastname).to eq('ijomah')
+    end
+
+    it 'returns dob' do
+      expect(person.dob).to eq(Time.new(1982, 10, 15))
     end
   end
 
-  context 'when it is not yet your birthday' do
-    let(:today) { Time.new(2016, 9, 20) }
-
-    it 'calculates age minus one' do
-      allow_any_instance_of(Person).to receive(:current_date) { today }
-      expect(person.age).to eq (today.year - birthday.year) - 1
-    end
-  end
-
-
-  context 'when it is past your birthday' do
-    let(:today) { Time.new(2016, 10, 21) }
-
-    it 'calculates age' do
-      allow_any_instance_of(Person).to receive(:current_date) { today }
-      expect(person.age).to eq (today.year - birthday.year)
+  describe '#age' do
+    it 'age method is called on AgeCalculator' do
+      # instance_double makes sure :age method exists in AgeCalculator
+      allow(AgeCalculator).to receive(:new).with(birthday) { instance_double('AgeCalculator', age: 34) }
+      allow_any_instance_of(AgeCalculator).to receive(:age) { 34 }
+      expect(person.age).to eq(34)
     end
   end
 end
-
